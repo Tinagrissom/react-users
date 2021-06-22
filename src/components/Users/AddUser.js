@@ -1,19 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Card from '../UI/Card.js'
+import Button from '../UI/Button.js'
+
+import classes from './AddUser.module.css'
 
 const AddUser = (props) => {
 
+    const [enteredUsername, setEnteredUsername] = useState('');
+    const [enteredAge, setEnteredAge] = useState('');
+    // useState always returns an array with 2 elements 
+    // using array destructuring to pull the 2 elements out of the array and store them 
+    // the 1st element is the current state snapshot
+    // the 2nd element holds a function which we can call to change the state
+
+    const usernameChangeHandler = (event) => {
+        setEnteredUsername(event.target.value);
+    }
+
+    const ageChangeHandler = (event) => {
+        setEnteredAge(event.target.value);
+    }
+
     const addUserHandler = (event) => {
         event.preventDefault()
+        console.log(enteredUsername, enteredAge);
     }
 
     return (
-        <form onSubmit={addUserHandler}>
-            <label htmlFor="username">Username</label>
-            <input id="username" type="text"></input>
-            <label htmlFor="age">Age (Years)</label>
-            <input id="age" type="text"></input>
-            <button type="submit">Add User</button>
-        </form>
+        <Card className={classes.input}>
+            <form onSubmit={addUserHandler}>
+                <label htmlFor="username">Username</label>
+                <input id="username" type="text" onChange={usernameChangeHandler}></input>
+                <label htmlFor="age">Age (Years)</label>
+                <input id="age" type="text" onChange={ageChangeHandler}></input>
+                <Button type="submit">Add User</Button>
+            </form>
+        </Card>
     )
 }
 
