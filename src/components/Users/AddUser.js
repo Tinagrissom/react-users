@@ -30,7 +30,7 @@ const AddUser = (props) => {
         // enteredAge is a string, anything that is entered into input is retrieved as a string
         return;
     }
-    console.log(enteredUsername, enteredAge);
+    props.onAddUser(enteredUsername, enteredAge);
     setEnteredUsername("");
     setEnteredAge("");
   };
