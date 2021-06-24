@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Card from "../UI/Card.js";
 import Button from "../UI/Button.js";
 import ErrorModal from "../UI/ErrorModal";
@@ -7,32 +7,32 @@ import Wrapper from "../Helpers/Wrapper";
 import classes from "./AddUser.module.css";
 
 const AddUser = (props) => {
-  const [enteredUsername, setEnteredUsername] = useState("");
-  const [enteredAge, setEnteredAge] = useState("");
+
+  const nameInputRef = useRef()
+  // if you just want to read a value, refs are better
+  // always is an object with a current prop and holds the value that ref is connected with
+  const ageInputRef = useRef()
+  // returns a value and alows us to work with the element we connect
+
   const [error, setError] = useState();
   // useState always returns an array with 2 elements
   // using array destructuring to pull the 2 elements out of the array and store them
   // the 1st element is the current state snapshot
   // the 2nd element holds a function which we can call to change the state
 
-  const usernameChangeHandler = (event) => {
-    setEnteredUsername(event.target.value);
-  };
-
-  const ageChangeHandler = (event) => {
-    setEnteredAge(event.target.value);
-  };
-
   const addUserHandler = (event) => {
     event.preventDefault();
-    if (enteredUsername.trim().length === 0 || enteredAge.trim().length === 0) {
+    const enteredName= nameInputRef.current.value;
+    const enteredUserAge = ageInputRef.current.value;
+
+    if (enteredName.trim().length === 0 || enteredUserAge.trim().length === 0) {
       setError({
         title: "Invalid input",
         message: "Please enter a valid name and age (non-empty values).",
       });
       return;
     }
-    if (+enteredAge < 1) {
+    if (+enteredUserAge < 1) {
       // adding the + in front of enteredAge turns it into a number
       // enteredAge is a string, anything that is entered into input is retrieved as a string
       setError({
@@ -41,9 +41,9 @@ const AddUser = (props) => {
       });
       return;
     }
-    props.onAddUser(enteredUsername, enteredAge);
-    setEnteredUsername("");
-    setEnteredAge("");
+    props.onAddUser(enteredName, enteredUserAge);
+    nameInputRef.current.value = '';
+    ageInputRef.current.value= '';
   };
 
   const errorHandler = () => {
@@ -59,15 +59,13 @@ const AddUser = (props) => {
           <input
             id="username"
             type="text"
-            value={enteredUsername}
-            onChange={usernameChangeHandler}
+            ref={nameInputRef}
           ></input>
           <label htmlFor="age">Age (Years)</label>
           <input
             id="age"
             type="text"
-            value={enteredAge}
-            onChange={ageChangeHandler}
+            ref={ageInputRef}
           ></input>
           <Button type="submit">Add User</Button>
         </form>
